@@ -7,6 +7,7 @@ public class Global
     private static Global instance = null;
 
     private int score = 0;
+    public int Level = 1;
 
     private float magnetvalue = 0;
     private int scoremodifier = 1;
@@ -15,7 +16,8 @@ public class Global
 
     public void ResetGlobal()
     {
-        instance = new Global();
+        scoremodifier = 1;
+        magnetvalue = 0;
         instance.isGameActive = true;
     }
 
@@ -51,12 +53,14 @@ public class Global
     }
 
 
-    public enum Powerups { AddTime = 0, Magnet = 1, Score = 2, Spawn = 3, Bomb = 4}
+    public enum Powerups { AddTime = 0, Magnet = 1, Score = 2, Grow = 3, Bomb = 4}
     private int delta_score = 1;
     private int dur_score = 10;
     private int delta_magnet = 4;
-    private int dur_magnet = 8;
+    private int dur_magnet = 10;
     private int delta_time = 10;
+    private int delta_grow = 2;
+    private int dur_grow = 10;
 
     public void StartPowerup(Powerups pu)
     {
@@ -75,14 +79,12 @@ public class Global
                 scoremodifier += delta_score;
                 timer.StartScoreModifierTimer(dur_score);
                 break;
-            case Powerups.Spawn:
-                var spawners = GameObject.FindGameObjectsWithTag("SpawnChecker");
-                foreach (GameObject h in spawners)
-                    try
-                    {
-                        h.GetComponent<HarvestSpawnerTimer>().ForceSpawn();
-                    }
-                    catch { }
+            case Powerups.Grow:
+                //var slimesg = GameObject.FindGameObjectsWithTag("Slime");
+                //var shroomsg = GameObject.FindGameObjectsWithTag("Mushroom");
+                var herog = GameObject.Find("Hero Circle Sprite");
+                herog.transform.localScale *= delta_grow;
+                timer.SizeModifier(dur_grow);
                 break;
             case Powerups.Bomb:
                 var slimes = GameObject.FindGameObjectsWithTag("Slime");
@@ -118,8 +120,9 @@ public class Global
             case Powerups.Score:
                 scoremodifier += delta_score;
                 break;
-            case Powerups.Spawn:
-                // something
+            case Powerups.Grow:
+                var herog = GameObject.Find("Hero Circle Sprite");
+                herog.transform.localScale /= delta_grow;
                 break;
         }
     }

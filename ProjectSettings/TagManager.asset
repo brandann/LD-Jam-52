@@ -16,6 +16,7 @@ TagManager:
   - Powerup
   - BurstObject
   - ScoreTarget
+  - Sign
   layers:
   - Default
   - TransparentFX

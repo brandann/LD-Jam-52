@@ -7,13 +7,22 @@ public class GameTimer : MonoBehaviour
 {
     public TextMeshProUGUI Score;
     public TextMeshProUGUI Timer;
+    public GameObject TimeUpPanel;
     public GameObject GameOverPanel;
     public GameObject HUDPanel;
+    public TextMeshProUGUI TimeUpScore;
     public TextMeshProUGUI GameOverScore;
     public int initialTime;
     public float currentTime;
     private bool isPaused = false;
     private float delta_time = 0.1f;
+
+    Color blue = new Color(107f / 255f, 205f / 255f, 227f / 255f, 215f / 255f);
+    //Color blue = new Color(107, 205, 227, 200);
+    Color red = new Color(227f / 255f, 21f / 255f, 34f / 255f, 150f / 255f);
+    //Color red = new Color(227 , 21 , 34 , 200 );
+    int small = 74;
+    int larger = 225;
 
     private Coroutine routine;
 
@@ -63,16 +72,45 @@ public class GameTimer : MonoBehaviour
     {
         int timei = (int)(currentTime * 100);
         float timef = ((float) timei) / 100f;
-        Timer.text = "" + timef;
+        
+
+        if (currentTime <= 4f)
+        {
+            Timer.text = "" + timef;
+            Timer.color = red;
+            Timer.fontSize = larger;
+        }
+        else
+        {
+            Timer.text = "" + (int)currentTime;
+            Timer.color = blue;
+            Timer.fontSize = small;
+        }
     }
 
     private void EndGame()
     {
+        Global.Instance.Level++;
+
         Time.timeScale = 0;
         Global.Instance.isGameActive = false;
         HUDPanel.SetActive(false);
-        GameOverPanel.SetActive(true);
-        GameOverScore.text = "" + Global.Instance.Score;
+
+        if (Global.Instance.Level == 2)
+        {
+            TimeUpPanel.SetActive(true);
+            TimeUpScore.text = "" + Global.Instance.Score;
+        }
+        else if (Global.Instance.Level == 3)
+        {
+            TimeUpPanel.SetActive(true);
+            TimeUpScore.text = "" + Global.Instance.Score;
+        }
+        else if (Global.Instance.Level == 4)
+        {
+            GameOverPanel.SetActive(true);
+            GameOverScore.text = "" + Global.Instance.Score;
+        }
     }
 
     public void AddTime(int v)
@@ -100,5 +138,16 @@ public class GameTimer : MonoBehaviour
     {
         yield return new WaitForSeconds(v);
         Global.Instance.EndPowerup(Global.Powerups.Score);
+    }
+
+    public void SizeModifier(int v)
+    {
+        StartCoroutine(SizeModifierTimer(v));
+    }
+
+    IEnumerator SizeModifierTimer(int v)
+    {
+        yield return new WaitForSeconds(v);
+        Global.Instance.EndPowerup(Global.Powerups.Grow);
     }
 }
