@@ -3,7 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Wall
+  - Obstacles
+  - Mushroom
+  - Slime
+  - Hero
+  - SpawnChecker
+  - MushroomBody
+  - SlimeBody
+  - Magnet
+  - Powerup
+  - BurstObject
+  - ScoreTarget
   layers:
   - Default
   - TransparentFX
@@ -11,7 +23,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Maget
   - 
   - 
   - 
